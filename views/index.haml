@@ -1,0 +1,6 @@
+.jumbotron
+  %h2 Welcome to Project time reporting tool
+
+  - if !env['warden'].authenticated?
+    %p
+      Please, login
