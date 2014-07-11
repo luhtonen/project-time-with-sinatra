@@ -1,0 +1,12 @@
+- if @project && @project.id
+  %h2 #{@project.title} details
+- else
+  %h2 New project
+
+%form{:action => '/projects', :role => 'form'}
+  .form-group
+    %label{:for => 'title'}Project title
+    %input{:type => 'text', :id => 'title', :class => 'form-control', :name => 'project[title]', :value => @project && "#{@project.title}"}
+  .form-group
+    %input{:type => 'submit', :value => 'Save', :class => 'btn btn-primary'}
+    %a{:href => '/projects', :class => 'btn btn-default'}Cancel

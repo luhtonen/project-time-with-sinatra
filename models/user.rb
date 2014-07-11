@@ -1,3 +1,5 @@
+require_relative 'project'
+
 class User
   include DataMapper::Resource
   include BCrypt
@@ -10,6 +12,8 @@ class User
   property :active, Boolean
   property :createdAt, DateTime, :default => lambda{ |p,s| DateTime.now}
   property :updatedAt, DateTime
+
+  has n, :projects
 
   def authenticate(attempted_password)
     if self.password == attempted_password
