@@ -2,6 +2,7 @@ require 'sinatra'
 require 'sinatra/flash'
 require 'warden'
 require 'haml'
+require_relative 'config/init'
 require_relative 'models/init'
 require_relative 'routes/init'
 

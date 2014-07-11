@@ -1,5 +1,11 @@
 class ProjectTimeApp < Sinatra::Base
 
+  @show_inactive_projects = false
+
+  def set_show_inactive_projects
+
+  end
+
   before %r{/projects/*} do
     env['warden'].authenticate!
     activate_tab('projects')
@@ -9,13 +15,18 @@ class ProjectTimeApp < Sinatra::Base
     @project = Project.get(id)
 
     if !@project
-      halt 404, "project #{id} not found"
+      flash[:error] = "Project #{id} was not found"
+      # 404 # Not found
+      redirect '/projects'
+    elsif @project.user_id != env['warden'].user.id
+      flash[:error] = "You're not authorized to see this page"
+      # 403 # Not authorized
+      redirect '/projects'
     end
   end
 
   get %r{projects/\d+} do
     if @project
-      @project
       haml :project_details
     end
   end
@@ -25,41 +36,61 @@ class ProjectTimeApp < Sinatra::Base
   end
 
   post '/projects' do
-    input = params.slice 'title', 'description'
+    id = params[:id]
+    if id
+      @project = Project.get(id)
+    end
+    param_list = ['title', 'number', 'location', 'position', 'mandays', 'approver', 'startdate', 'enddate', 'active']
+    params['active'] = params['active'] == 'on' ? true : false
+    input = params.slice 'title', 'number', 'location', 'position', 'mandays', 'approver', 'active'
+    if params['startdate']
+      input['startdate'] = params['startdate']
+    end
+    if params['enddate']
+      input['enddate'] = params['enddate']
+    end
     if @project
-      if @project.update(input.only 'title', 'description')
-        200 # OK
+      if @project.update(input)
+        flash[:success] = "Project was saved successfully"
+        #200 # OK
+        redirect '/projects'
       else
-        400 # Bad request
+        flash[:error] = "Was not able to update the project #{@project.title}"
+        #400 # Bad request
+        redirect '/projects'
       end
     else
+      @project = Project.new(input)
+      @project.user = env['warden'].user
       if @project.save()
-        200 # Ok
+        flash[:success] = "Project was saved successfully"
+        # 200 # Ok
+        redirect '/projects'
       else
-        400 # Bad request
+        flash[:error] = "Was not able to create the project #{@project.title}"
+        # 400 # Bad request
+        redirect '/projects'
       end
     end
   end
 
   delete %r{projects/\d+} do
     if @project
-      @project.active = false
-      if @project.update('active')
-        200 # OK
+      input['active'] = false
+      if @project.update input
+        flash[:success] = "Project was successfully deleted"
+        # 200 # OK
+        redirect '/projects'
       else
-        500 # Internal Server Error
+        flash[:error] = "Was not able to delete the project #{@project.title}"
+        # 500 # Internal Server Error
+        redirect '/projects'
       end
     end
   end
 
   get '/projects' do
-    @projects = Project.all
+    @projects = Project.all(:user => env['warden'].user, :active => true)
     haml :projects
   end
-
-  # get '/projects' do
-  #   env['warden'].authenticate!
-  #   @current_user = env['warden'].user
-  #   haml :projects
-  # end
 end

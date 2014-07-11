@@ -1,6 +1,11 @@
-%a{:href => '/projects/new', :class => 'btn btn-primary'}
-  .glyphicon.glyphicon-plus
-  Add Project
+.row
+  %a{:href => '/projects/new', :class => 'btn btn-primary'}
+    .glyphicon.glyphicon-plus
+    Add Project
+
+  .checkbox{:class => 'pull-right'}
+    %label
+      %input{:type => 'checkbox'} Show inactive projects
 
 %br
 %table{:class => 'table'}
@@ -29,5 +34,5 @@
         %td
           %a{:href => "/projects/#{project.id}", :class => 'btn btn-primary'}
             .glyphicon.glyphicon-pencil
-          %a{:href => "/projects/#{project.id}", :method => 'DELETE', :class => 'btn btn-danger'}
+          %a{:href => "/projects/#{project.id}", :class => 'btn btn-danger'}
             .glyphicon.glyphicon-remove
