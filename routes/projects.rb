@@ -24,11 +24,17 @@ class ProjectTimeApp < Sinatra::Base
     haml :project_details
   end
 
-  post %r{projects/\d+} do
+  post '/projects' do
+    input = params.slice 'title', 'description'
     if @project
-      input = params.slice 'title', 'description'
       if @project.update(input.only 'title', 'description')
         200 # OK
+      else
+        400 # Bad request
+      end
+    else
+      if @project.save()
+        200 # Ok
       else
         400 # Bad request
       end
