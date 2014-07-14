@@ -13,4 +13,5 @@ class Project
   property :enddate, Date
 
   belongs_to :user, key => true
+  has n, :dayentrys
 end

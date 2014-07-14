@@ -1,1 +1,29 @@
-%h2 Timereport comes here...
+.row
+  - if @project
+    %p Report time for project (#{@project.id}) #{@project.title}
+  - else
+    %p select project
+
+%br
+%table{:class => 'table'}
+  %thead
+    %tr
+      %th Date
+      %th Hours
+      %th Days
+      %th Project
+      %th Description
+      %th Actions
+  %tbody
+    - @dayentries.each do |dayentry|
+      %tr
+        %td #{dayentry.date}
+        %td #{dayentry.hours}
+        %td #{dayentry.days}
+        %td #{dayentry.project}
+        %td #{dayentry.description}
+        %td{:id => 'action-buttons'}
+          %a{:href => "/timereports/#{dayentry.id}", :class => 'btn btn-primary', :data => {:toggle => 'tooltip'}, :title => "Edit day entry"}
+            .glyphicon.glyphicon-pencil
+          %a{:href => "/timereports/#{dayentryid}", :class => 'btn btn-danger', :data => {:toggle => 'tooltip'}, :title => "Remove day entry"}
+            .glyphicon.glyphicon-remove

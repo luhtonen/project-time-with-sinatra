@@ -17,8 +17,8 @@
       %th Position
       %th Approver
       %th Man days
-      %th Start date
-      %th End date
+      -# %th Start date
+      -# %th End date
       %th Actions
   %tbody
     - @projects.each do |project|
@@ -29,12 +29,12 @@
         %td #{project.position}
         %td #{project.approver}
         %td #{project.mandays}
-        %td #{project.startdate}
-        %td #{project.enddate}
+        -# %td #{project.startdate}
+        -# %td #{project.enddate}
         %td{:id => 'action-buttons'}
           %a{:href => "/projects/#{project.id}", :class => 'btn btn-primary', :data => {:toggle => 'tooltip'}, :title => "Edit project"}
             .glyphicon.glyphicon-pencil
-          %a{:href => "/timereport", :class => 'btn btn-info', :data => {:toggle => 'tooltip'}, :title => "Report project time"}
+          %a{:href => "/timereport/#{project.id}", :class => 'btn btn-info', :data => {:toggle => 'tooltip'}, :title => "Report project time"}
             .glyphicon.glyphicon-list-alt
           %a{:href => "/projects/#{project.id}", :class => 'btn btn-danger', :data => {:toggle => 'tooltip'}, :title => "Make project inactive"}
             .glyphicon.glyphicon-remove

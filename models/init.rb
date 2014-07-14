@@ -2,7 +2,8 @@ require 'data_mapper'
 require 'dm-sqlite-adapter'
 require 'bcrypt'
 require_relative 'user'
-#require_relative 'security'
+require_relative 'project'
+require_relative 'dayentry'
 
 DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/projects.db")
 DataMapper.finalize

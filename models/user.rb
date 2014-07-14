@@ -10,10 +10,11 @@ class User
   property :name, String, :required => true
   property :email, String, :required => true
   property :active, Boolean
-  property :createdAt, DateTime, :default => lambda{ |p,s| DateTime.now}
+  property :createdAt, DateTime, :default => lambda{ |p,s| DateTime.now }
   property :updatedAt, DateTime
 
   has n, :projects
+  has n, :dayentrys
 
   def authenticate(attempted_password)
     if self.password == attempted_password
