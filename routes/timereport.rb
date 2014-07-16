@@ -27,6 +27,17 @@ class ProjectTimeApp < Sinatra::Base
     end
   end
 
+  get "/timereport/:projid/new" do
+    haml :timereport_details
+  end
+
+  post "/timereport/:projid" do
+    id = params[:id]
+    if id
+      @dayentry = Dayentry.get(id)
+    end
+  end
+
   get '/timereport' do
     @dayentries = Dayentry.all(:user_id => env['warden'].user.id)
 

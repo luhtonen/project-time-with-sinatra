@@ -40,7 +40,6 @@ class ProjectTimeApp < Sinatra::Base
     if id
       @project = Project.get(id)
     end
-    param_list = ['title', 'number', 'location', 'position', 'mandays', 'approver', 'startdate', 'enddate', 'active']
     params['active'] = params['active'] == 'on' ? true : false
     input = params.slice 'title', 'number', 'location', 'position', 'mandays', 'approver', 'active'
     if params['startdate']
